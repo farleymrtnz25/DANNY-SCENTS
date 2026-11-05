@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DANNY SCENTS | Velas Artesanales & Aromaterapia de Manzanilla</title>
+  <meta name="description" content="DANNY SCENTS: Velas escultóricas 100% artesanales con Aceite Esencial Puro de Manzanilla. Ositos, rosas, margaritas, hojas botánicas, ramos florales y cajas de regalo." />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,600;0,700;1,600&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+  <!-- Top Announcement Bar -->
+  <div class="announcement-bar">
+    <span class="announcement-badge">Edición Botánica</span>
+    <span>✨ Velas 100% artesanales con <strong>Aceite Esencial de Manzanilla</strong> — "Encendida para iluminar mis metas" ✨</span>
+  </div>
+
+  <!-- Navbar -->
+  <header class="navbar">
+    <div class="container navbar-inner">
+      <a href="#inicio" class="brand-logo">
+        <div class="brand-icon">🕯️</div>
+        <div class="brand-text">
+          <span class="brand-name">DANNY SCENTS</span>
+          <span class="brand-tagline">Arte en Cera &amp; Manzanilla</span>
+        </div>
+      </a>
+
+      <ul class="nav-links">
+        <li><a href="#inicio">Inicio</a></li>
+        <li><a href="#catalogo">Catálogo &amp; Tienda</a></li>
+        <li><a href="#esencia">Esencia de Manzanilla</a></li>
+        <li><a href="#packs">Cajas de Regalo</a></li>
+      </ul>
+
+      <div class="nav-actions">
+        <button class="cart-btn" id="openCartBtn" aria-label="Abrir carrito de compras">
+          <span>🛍️ Mi Pedido</span>
+          <span class="cart-count" id="cartCount">0</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="hero" id="inicio">
+    <div class="container hero-grid">
+      <div class="hero-content">
+        <div class="hero-eyebrow">🌼 Cera Natural &amp; Aceite Esencial de Manzanilla</div>
+        <h1 class="hero-title">
+          Luz, Aroma y Ternura Esculpidos a Mano en <span>Danny Scents</span>
+        </h1>
+        <blockquote class="hero-quote">
+          "Encendida para iluminar mis metas."
+        </blockquote>
+        <p class="hero-description">
+          Cada vela de <strong>DANNY SCENTS</strong> es una obra artesanal moldeada con dedicación: desde tiernos ositos de miel y manzanilla en cajas de regalo, hasta bouquets florales, rosas bicolores, margaritas multipétalo, hojas botánicas y velas en frasco coronadas con flores de cera.
+        </p>
+
+        <div class="hero-ctas">
+          <a href="#catalogo" class="btn btn-primary">Ver Catálogo de Velas →</a>
+          <a href="#packs" class="btn btn-secondary">🎁 Ver Cajas de Regalo</a>
+        </div>
+
+        <div class="hero-stats">
+          <div class="stat-item">
+            <strong>18+</strong>
+            <span>Figuras y Diseños Artesanales</span>
+          </div>
+          <div class="stat-item">
+            <strong>100%</strong>
+            <span>Esencia Pura de Manzanilla</span>
+          </div>
+          <div class="stat-item">
+            <strong>6</strong>
+            <span>Colecciones Botánicas &amp; Regalo</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="hero-visual">
+        <div class="hero-bento">
+          <div class="bento-card main-card">
+            <img src="imagenes/osito-caja-regalo-ia.png" alt="Vela Osito en Caja de Regalo Danny Scents" />
+            <div class="bento-badge">
+              <span>Osito "Ilumina tus Metas"</span>
+              <span class="ai-pill">Regalo</span>
+            </div>
+          </div>
+          <div class="bento-card">
+            <img src="imagenes/vela-frasco-rosa.jpeg" alt="Vela en Frasco Bicolor Amarillo y Verde con Rosa" />
+            <div class="bento-badge">
+              <span>Frasco Bicolor con Rosa</span>
+              <span class="ai-pill">Estrella</span>
+            </div>
+          </div>
+          <div class="bento-card">
+            <img src="imagenes/ramo-velas-ia.png" alt="Ramo Floral de Velas Amarillas Danny Scents" />
+            <div class="bento-badge">
+              <span>Bouquet Sol de Manzanilla</span>
+              <span class="ai-pill">Artesanal</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Catalog & Store Section -->
+  <section class="section" id="catalogo">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag">🕯️ Catálogo Danny Scents</span>
+        <h2 class="section-title">Nuestras Velas Artesanales</h2>
+        <p class="section-subtitle">
+          Elige tus figuras favoritas hechas a mano con cera natural y aceite esencial puro de manzanilla.
+        </p>
+      </div>
+
+      <div>
+        <div class="catalog-controls">
+          <div class="category-tabs" id="categoryTabs">
+            <button class="cat-tab active" data-cat="todos">Todos los Productos (18)</button>
+            <button class="cat-tab" data-cat="ositos">🧸 Ositos Ternura</button>
+            <button class="cat-tab" data-cat="rosas">🌹 Rosas Esculpidas</button>
+            <button class="cat-tab" data-cat="margaritas">🌼 Margaritas &amp; Crisantemos</button>
+            <button class="cat-tab" data-cat="flores5">🌸 Flores de 5 Pétalos</button>
+            <button class="cat-tab" data-cat="hojas">🍃 Hojas Botánicas</button>
+            <button class="cat-tab" data-cat="especiales">💐 Ramos, Frascos &amp; Esencia</button>
+          </div>
+
+          <div class="search-sort-wrap">
+            <input type="search" id="searchInput" class="search-input" placeholder="Buscar vela o aroma..." />
+            <select id="sortSelect" class="sort-select" aria-label="Ordenar productos">
+              <option value="featured">Orden: Destacados</option>
+              <option value="price-asc">Precio: Menor a Mayor</option>
+              <option value="price-desc">Precio: Mayor a Menor</option>
+              <option value="name-asc">Nombre: A - Z</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="products-grid" id="productsGrid">
+          <!-- Rendered dynamically via script.js -->
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Essence & Craft Section (Featuring Chamomile Essential Oil & Two-Tone Rose Jar) -->
+  <section class="section section-alt" id="esencia">
+    <div class="container essence-grid">
+      <div class="essence-content">
+        <span class="section-tag">🌿 El Corazón de Danny Scents</span>
+        <h2 class="section-title">Aceite Esencial de Manzanilla &amp; Arte en Frasco</h2>
+        <p style="color: var(--text-secondary); margin-bottom: 16px;">
+          El secreto detrás de cada vela de <strong>DANNY SCENTS</strong> es nuestra infusión de <strong>Aceite Esencial Puro de Manzanilla</strong>. Su aroma herbáceo, dulce y reconfortante transforma cualquier habitación en un refugio de paz, aliviando el estrés y acompañando tus momentos de estudio, meditación o descanso.
+        </p>
+
+        <div class="pillars-list">
+          <div class="pillar-item">
+            <div class="pillar-icon">🌼</div>
+            <div>
+              <h4 class="serif" style="font-size: 1.25rem;">Aromaterapia Calmante de Manzanilla</h4>
+              <p style="font-size: 0.88rem; color: var(--text-secondary);">Propiedades relajantes naturales que armonizan el ambiente, favorecen el sueño reparador y aportan calidez al hogar.</p>
+            </div>
+          </div>
+          <div class="pillar-item">
+            <div class="pillar-icon">🕯️</div>
+            <div>
+              <h4 class="serif" style="font-size: 1.25rem;">Cera Vegetal &amp; Pabilo 100% Algodón</h4>
+              <p style="font-size: 0.88rem; color: var(--text-secondary);">Quemado limpio, parejo y duradero. Nuestras figuras conservan un acabado brillante y pétalos definidos.</p>
+            </div>
+          </div>
+          <div class="pillar-item">
+            <div class="pillar-icon">🎁</div>
+            <div>
+              <h4 class="serif" style="font-size: 1.25rem;">Detalles Personalizados para Recordatorios y Metas</h4>
+              <p style="font-size: 0.88rem; color: var(--text-secondary);">Empaques con ventana, cinta dorada, mariposas y frases inspiradoras como <em>"Encendida para iluminar mis metas"</em>.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="essence-cards-pair">
+        <div class="essence-visual-card">
+          <img src="imagenes/aceite-esencial-manzanilla.jpeg" alt="Aceite Esencial de Manzanilla Danny Scents" />
+          <span class="badge badge-ai" style="margin-bottom: 8px;">Ingrediente Estrella</span>
+          <h4>Aceite Esencial de Manzanilla</h4>
+          <p>Extracto botánico puro que perfuma toda nuestra línea de ositos, flores y frascos.</p>
+        </div>
+
+        <div class="essence-visual-card">
+          <img src="imagenes/vela-frasco-rosa.jpeg" alt="Vela en Frasco Bicolor con Rosa Amarilla" />
+          <span class="badge badge-category" style="margin-bottom: 8px;">Edición de Lujo</span>
+          <h4>Frasco Bicolor "Brisa de Manzanilla"</h4>
+          <p>Degradado artesanal verde pradera y amarillo sol, coronado con una rosa esculpida en cera.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Gift Packs & Bundles Section -->
+  <section class="section" id="packs">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag">🎁 Colecciones &amp; Recordatorios</span>
+        <h2 class="section-title">Cajas y Kits Listos para Regalar</h2>
+        <p class="section-subtitle">
+          Combina nuestras figuras clasificadas en sets especiales con descuento para grados, cumpleaños, baby showers o bienestar personal.
+        </p>
+      </div>
+
+      <div class="packs-grid">
+        <div class="pack-card">
+          <span class="section-tag" style="width: fit-content;">Kit Detalle</span>
+          <h3>Dúo Ternura de Manzanilla</h3>
+          <p style="font-size: 0.9rem; color: var(--text-secondary);">El regalo perfecto para desear éxito y calma.</p>
+          <div class="pack-price">$28.000 <small style="font-size: 0.9rem; color: var(--text-muted);">COP</small></div>
+          <ul class="pack-list">
+            <li>✔️ 1 Osito en Caja Regalo "Ilumina tus Metas"</li>
+            <li>✔️ 1 Margarita Blanca de Manzanilla</li>
+            <li>✔️ 2 Mini Flores Solares aromáticas</li>
+            <li>✔️ Tarjeta con dedicatoria personalizada</li>
+          </ul>
+          <button class="btn btn-secondary" onclick="addPackToCart('Dúo Ternura de Manzanilla', 28000, 'imagenes/osito-caja-regalo-ia.png')">Agregar Kit al Pedido</button>
+        </div>
+
+        <div class="pack-card featured">
+          <span class="pack-ribbon">Más Vendido</span>
+          <span class="section-tag" style="width: fit-content;">Ritual Completo</span>
+          <h3>Colección Jardín Dorado Danny Scents</h3>
+          <p style="font-size: 0.9rem; color: var(--text-secondary);">Nuestras piezas icónicas reunidas en una experiencia aromática completa.</p>
+          <div class="pack-price">$64.000 <small style="font-size: 0.9rem; color: var(--text-muted);">COP</small></div>
+          <ul class="pack-list">
+            <li>✔️ 1 Vela en Frasco Bicolor con Rosa Amarilla</li>
+            <li>✔️ 1 Bouquet Floral "Sol de Manzanilla" en tul verde</li>
+            <li>✔️ 1 Osito Botánico con pétalos de manzanilla</li>
+            <li>✔️ 1 Gotero Aceite Esencial de Manzanilla (10 ml)</li>
+          </ul>
+          <button class="btn btn-primary" onclick="addPackToCart('Colección Jardín Dorado Danny Scents', 64000, 'imagenes/vela-frasco-rosa.jpeg')">Agregar Colección al Pedido</button>
+        </div>
+
+        <div class="pack-card">
+          <span class="section-tag" style="width: fit-content;">Muestrario Completo</span>
+          <h3>Bandeja Maestra (27 Figuras)</h3>
+          <p style="font-size: 0.9rem; color: var(--text-secondary);">Todas las figuras de nuestra fotografía de catálogo para eventos o decoración.</p>
+          <div class="pack-price">$135.000 <small style="font-size: 0.9rem; color: var(--text-muted);">COP</small></div>
+          <ul class="pack-list">
+            <li>✔️ 5 Ositos (Miel Ámbar y Manzanilla Botánico)</li>
+            <li>✔️ 2 Rosas Esculpidas (Azul Noche y Moka)</li>
+            <li>✔️ 8 Flores Medianas (Margaritas y 5 Pétalos)</li>
+            <li>✔️ 2 Hojas Botánicas + 1 Ánfora Blanca + 9 Mini Flores</li>
+          </ul>
+          <button class="btn btn-secondary" onclick="addPackToCart('Bandeja Maestra Completa (27 Figuras)', 135000, 'imagenes/catalogo-figuras-ia.png')">Agregar Bandeja al Pedido</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div>
+          <div class="brand-logo" style="margin-bottom: 14px;">
+            <div class="brand-icon">🕯️</div>
+            <div class="brand-text">
+              <span class="brand-name" style="color: #FFF;">DANNY SCENTS</span>
+              <span class="brand-tagline" style="color: var(--gold-primary);">Velas Artesanales &amp; Aromaterapia</span>
+            </div>
+          </div>
+          <p style="font-size: 0.9rem; max-width: 340px;">
+            Creaciones artesanales en cera natural perfumadas con aceite esencial puro de manzanilla. Hechas a mano para iluminar tus metas y llenar de calma cada rincón.
+          </p>
+        </div>
+
+        <div>
+          <h4>Colecciones</h4>
+          <ul>
+            <li><a href="#catalogo" onclick="filterByCategory('ositos')">Ositos Ternura</a></li>
+            <li><a href="#catalogo" onclick="filterByCategory('rosas')">Rosas Esculpidas</a></li>
+            <li><a href="#catalogo" onclick="filterByCategory('margaritas')">Margaritas &amp; Crisantemos</a></li>
+            <li><a href="#catalogo" onclick="filterByCategory('flores5')">Flores de 5 Pétalos</a></li>
+            <li><a href="#catalogo" onclick="filterByCategory('hojas')">Hojas Botánicas</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <h4>Navegación</h4>
+          <ul>
+            <li><a href="#inicio">Inicio</a></li>
+            <li><a href="#catalogo">Catálogo &amp; Tienda</a></li>
+            <li><a href="#esencia">Aceite de Manzanilla</a></li>
+            <li><a href="#packs">Cajas de Regalo</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <h4>Pedidos Personalizados</h4>
+          <p style="font-size: 0.88rem; margin-bottom: 14px;">
+            ¿Deseas personalizar el color, el nombre en la caja o la frase de tus recordatorios? Arma tu carrito y envíanos tu pedido directo.
+          </p>
+          <button class="btn btn-primary" style="width: 100%; padding: 12px 18px;" onclick="openCart()">
+            🛍️ Ver Mi Pedido Actual
+          </button>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <p>© 2026 <strong>DANNY SCENTS</strong> — Todos los derechos reservados. Velas Artesanales con Esencia de Manzanilla.</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Backdrop Overlay -->
+  <div class="overlay" id="overlay"></div>
+
+  <!-- Quick View Product Modal -->
+  <div class="modal" id="quickViewModal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <div class="modal-grid">
+      <div class="modal-img-col">
+        <img id="modalImg" src="" alt="" />
+      </div>
+      <div class="modal-content-col">
+        <div>
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+            <span class="badge badge-category" id="modalCategory">Categoría</span>
+            <button class="close-btn" onclick="closeModal()" aria-label="Cerrar ventana">✕</button>
+          </div>
+          <div class="product-scent" id="modalScent">Aroma</div>
+          <h3 class="serif" id="modalTitle" style="font-size: 2rem; margin-bottom: 10px;">Nombre del Producto</h3>
+          <p id="modalDesc" style="color: var(--text-secondary); font-size: 0.94rem; margin-bottom: 18px;"></p>
+          <div class="product-specs" id="modalSpecs" style="margin-bottom: 18px;"></div>
+          <div style="background: var(--bg-primary); padding: 12px 14px; border-radius: 10px; font-size: 0.84rem; margin-bottom: 20px;">
+            <strong>✨ Detalle Artesanal:</strong> <span id="modalTrayOrigin"></span>
+          </div>
+        </div>
+
+        <div style="display: flex; justify-content: space-between; align-items: center; gap: 16px;">
+          <div class="product-price" id="modalPrice">$0</div>
+          <button class="btn btn-primary" id="modalAddBtn">Agregar al Pedido</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Shopping Cart Drawer -->
+  <aside class="cart-drawer" id="cartDrawer" aria-label="Carrito de compras">
+    <div class="drawer-header">
+      <div>
+        <h3 class="serif" style="font-size: 1.65rem;">Tu Pedido Danny Scents</h3>
+        <span style="font-size: 0.8rem; color: var(--text-muted);">Velas hechas a mano con esencia de manzanilla</span>
+      </div>
+      <button class="close-btn" id="closeCartBtn" aria-label="Cerrar carrito">✕</button>
+    </div>
+
+    <div class="cart-items" id="cartItemsList">
+      <!-- Dynamic cart items -->
+    </div>
+
+    <div class="drawer-footer">
+      <div class="gift-note-box">
+        <label for="giftMessageInput">🎀 Frase para tu Caja de Regalo (Opcional):</label>
+        <input type="text" id="giftMessageInput" value="Encendida para iluminar mis metas." placeholder="Escribe tu frase personalizada..." />
+      </div>
+      <div class="cart-total-row">
+        <span>Total Estimado:</span>
+        <span id="cartTotalValue">$0 COP</span>
+      </div>
+      <button class="btn btn-primary" style="width: 100%;" onclick="checkoutOrder()">
+        ✨ Confirmar Pedido por WhatsApp / Resumen
+      </button>
+    </div>
+  </aside>
+
+  <!-- Toast Notification -->
+  <div class="toast" id="toast">Producto agregado a tu pedido</div>
+
+  <script src="script.js"></script>
+</body>
+</html>

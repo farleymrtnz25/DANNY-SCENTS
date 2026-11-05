@@ -1,0 +1,13 @@
+{
+  "name": "danny-scents",
+  "version": "1.0.0",
+  "description": "DANNY SCENTS - Tienda web de velas artesanales con Aceite Esencial de Manzanilla",
+  "main": "server.js",
+  "scripts": {
+    "build": "echo 'Build listo para Render'",
+    "start": "node server.js"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}

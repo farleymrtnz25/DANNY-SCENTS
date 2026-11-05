@@ -1,0 +1,10 @@
+services:
+  - type: web
+    name: danny-scents
+    runtime: static
+    buildCommand: echo "Static build ready"
+    staticPublishPath: .
+    routes:
+      - type: rewrite
+        source: /*
+        destination: /index.html
