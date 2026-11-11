@@ -33,10 +33,13 @@
         <li><a href="#inicio">Inicio</a></li>
         <li><a href="#catalogo">Catálogo &amp; Tienda</a></li>
         <li><a href="#esencia">Esencia de Manzanilla</a></li>
-        <li><a href="#packs">Cajas de Regalo</a></li>
       </ul>
 
       <div class="nav-actions">
+        <button class="admin-nav-btn" id="authNavBtn" onclick="handleAuthNavClick()">
+          <span id="authNavIcon">🔐</span>
+          <span id="authNavLabel">Iniciar Sesión</span>
+        </button>
         <button class="cart-btn" id="openCartBtn" aria-label="Abrir carrito de compras">
           <span>🛍️ Mi Pedido</span>
           <span class="cart-count" id="cartCount">0</span>
@@ -62,12 +65,12 @@
 
         <div class="hero-ctas">
           <a href="#catalogo" class="btn btn-primary">Ver Catálogo de Velas →</a>
-          <a href="#packs" class="btn btn-secondary">🎁 Ver Cajas de Regalo</a>
+          <a href="#esencia" class="btn btn-secondary">🌼 Esencia de Manzanilla</a>
         </div>
 
         <div class="hero-stats">
           <div class="stat-item">
-            <strong>18+</strong>
+            <strong>8</strong>
             <span>Figuras y Diseños Artesanales</span>
           </div>
           <div class="stat-item">
@@ -75,8 +78,8 @@
             <span>Esencia Pura de Manzanilla</span>
           </div>
           <div class="stat-item">
-            <strong>6</strong>
-            <span>Colecciones Botánicas &amp; Regalo</span>
+            <strong>5</strong>
+            <span>Colecciones Botánicas</span>
           </div>
         </div>
       </div>
@@ -84,10 +87,10 @@
       <div class="hero-visual">
         <div class="hero-bento">
           <div class="bento-card main-card">
-            <img src="imagenes/osito-caja-regalo-ia.png" alt="Vela Osito en Caja de Regalo Danny Scents" />
+            <img src="imagenes/osito-miel-ambar.png" alt="Vela Osito Miel Ámbar Clásico Danny Scents" />
             <div class="bento-badge">
-              <span>Osito "Ilumina tus Metas"</span>
-              <span class="ai-pill">Regalo</span>
+              <span>Osito Miel Ámbar Clásico</span>
+              <span class="ai-pill">Cera Natural</span>
             </div>
           </div>
           <div class="bento-card">
@@ -123,12 +126,11 @@
       <div>
         <div class="catalog-controls">
           <div class="category-tabs" id="categoryTabs">
-            <button class="cat-tab active" data-cat="todos">Todos los Productos (18)</button>
+            <button class="cat-tab active" data-cat="todos">Todos los Productos (8)</button>
             <button class="cat-tab" data-cat="ositos">🧸 Ositos Ternura</button>
             <button class="cat-tab" data-cat="rosas">🌹 Rosas Esculpidas</button>
-            <button class="cat-tab" data-cat="margaritas">🌼 Margaritas &amp; Crisantemos</button>
+            <button class="cat-tab" data-cat="margaritas">🌼 Margaritas</button>
             <button class="cat-tab" data-cat="flores5">🌸 Flores de 5 Pétalos</button>
-            <button class="cat-tab" data-cat="hojas">🍃 Hojas Botánicas</button>
             <button class="cat-tab" data-cat="especiales">💐 Ramos, Frascos &amp; Esencia</button>
           </div>
 
@@ -203,59 +205,361 @@
     </div>
   </section>
 
-  <!-- Gift Packs & Bundles Section -->
-  <section class="section" id="packs">
+  <!-- =========================================================
+       PANEL DE USUARIO: INVENTARIO, PRODUCTOS, VENTAS Y CONTABILIDAD
+       ========================================================= -->
+  <section class="admin-panel-section" id="adminPanelSection">
     <div class="container">
-      <div class="section-header">
-        <span class="section-tag">🎁 Colecciones &amp; Recordatorios</span>
-        <h2 class="section-title">Cajas y Kits Listos para Regalar</h2>
-        <p class="section-subtitle">
-          Combina nuestras figuras clasificadas en sets especiales con descuento para grados, cumpleaños, baby showers o bienestar personal.
-        </p>
+      <div class="admin-topbar">
+        <div>
+          <span class="badge badge-ai" style="margin-bottom: 6px; display: inline-block;">🔐 Sistema Contable &amp; Base de Datos SQLite</span>
+          <h2 class="serif">Panel de Control — DANNY SCENTS</h2>
+          <p style="font-size: 0.88rem; color: rgba(255,255,255,0.8);">
+            Sesión iniciada como: <strong id="adminUserNameDisplay" style="color: var(--gold-primary);">Administrador</strong>
+          </p>
+        </div>
+        <div class="admin-topbar-actions">
+          <button class="btn btn-primary" onclick="openProductModal()">➕ Agregar Producto</button>
+          <button class="btn btn-secondary" style="background:#FFF; color:#141B16;" onclick="openStockModal()">📦 + Agregar Stock</button>
+          <button class="btn btn-secondary" style="background:var(--gold-primary); color:#141B16; border:none;" onclick="switchAdminTab('pos')">🧾 Registrar Venta</button>
+          <button class="btn btn-secondary" style="background:rgba(255,255,255,0.12); color:#FFF; border:1px solid rgba(255,255,255,0.3);" onclick="logoutUser()">🚪 Cerrar Sesión</button>
+        </div>
       </div>
 
-      <div class="packs-grid">
-        <div class="pack-card">
-          <span class="section-tag" style="width: fit-content;">Kit Detalle</span>
-          <h3>Dúo Ternura de Manzanilla</h3>
-          <p style="font-size: 0.9rem; color: var(--text-secondary);">El regalo perfecto para desear éxito y calma.</p>
-          <div class="pack-price">$28.000 <small style="font-size: 0.9rem; color: var(--text-muted);">COP</small></div>
-          <ul class="pack-list">
-            <li>✔️ 1 Osito en Caja Regalo "Ilumina tus Metas"</li>
-            <li>✔️ 1 Margarita Blanca de Manzanilla</li>
-            <li>✔️ 2 Mini Flores Solares aromáticas</li>
-            <li>✔️ Tarjeta con dedicatoria personalizada</li>
-          </ul>
-          <button class="btn btn-secondary" onclick="addPackToCart('Dúo Ternura de Manzanilla', 28000, 'imagenes/osito-caja-regalo-ia.png')">Agregar Kit al Pedido</button>
+      <!-- Pestañas del Panel (Cada sección por separado) -->
+      <div class="admin-tabs">
+        <button class="admin-tab-btn active" data-admintab="inventario" onclick="switchAdminTab('inventario')">
+          📦 1. Inventario &amp; Productos
+        </button>
+        <button class="admin-tab-btn" data-admintab="dia" onclick="switchAdminTab('dia')">
+          📅 2. Ventas por Día
+        </button>
+        <button class="admin-tab-btn" data-admintab="mes" onclick="switchAdminTab('mes')">
+          📆 3. Ventas por Mes
+        </button>
+        <button class="admin-tab-btn" data-admintab="anio" onclick="switchAdminTab('anio')">
+          📊 4. Ventas por Año
+        </button>
+        <button class="admin-tab-btn" data-admintab="pos" onclick="switchAdminTab('pos')">
+          🧾 5. Registrar Venta &amp; Contabilidad General
+        </button>
+      </div>
+
+      <!-- VISTA 1: INVENTARIO, PRODUCTOS Y STOCK -->
+      <div class="admin-view active" id="adminView-inventario">
+        <div class="kpi-grid" id="inventoryKpis"></div>
+
+        <div class="admin-card">
+          <div class="admin-card-header">
+            <div>
+              <h3 class="serif" style="font-size: 1.55rem;">Control de Inventario y Catálogo de Productos</h3>
+              <p style="font-size: 0.85rem; color: var(--text-secondary);">Administra existencias, costos de producción, precios de venta y alertas de stock mínimo.</p>
+            </div>
+            <div class="admin-card-actions">
+              <button class="btn-sm" onclick="openProductModal()">➕ Nuevo Producto</button>
+              <button class="btn-sm" onclick="openStockModal()">📦 + Agregar Stock</button>
+              <button class="btn-pdf" onclick="exportInventoryPDF()">📄 Descargar PDF de Inventario</button>
+            </div>
+          </div>
+
+          <div class="table-responsive">
+            <table class="admin-table">
+              <thead>
+                <tr>
+                  <th>Imagen</th>
+                  <th>Producto / Categoría</th>
+                  <th>Costo Unit.</th>
+                  <th>Precio Venta</th>
+                  <th>Ganancia Unit.</th>
+                  <th>Stock Actual</th>
+                  <th>Valor en Stock (Venta)</th>
+                  <th>Acciones</th>
+                </tr>
+              </thead>
+              <tbody id="adminInventoryTableBody"></tbody>
+            </table>
+          </div>
         </div>
 
-        <div class="pack-card featured">
-          <span class="pack-ribbon">Más Vendido</span>
-          <span class="section-tag" style="width: fit-content;">Ritual Completo</span>
-          <h3>Colección Jardín Dorado Danny Scents</h3>
-          <p style="font-size: 0.9rem; color: var(--text-secondary);">Nuestras piezas icónicas reunidas en una experiencia aromática completa.</p>
-          <div class="pack-price">$64.000 <small style="font-size: 0.9rem; color: var(--text-muted);">COP</small></div>
-          <ul class="pack-list">
-            <li>✔️ 1 Vela en Frasco Bicolor con Rosa Amarilla</li>
-            <li>✔️ 1 Bouquet Floral "Sol de Manzanilla" en tul verde</li>
-            <li>✔️ 1 Osito Botánico con pétalos de manzanilla</li>
-            <li>✔️ 1 Gotero Aceite Esencial de Manzanilla (10 ml)</li>
-          </ul>
-          <button class="btn btn-primary" onclick="addPackToCart('Colección Jardín Dorado Danny Scents', 64000, 'imagenes/vela-frasco-rosa.jpeg')">Agregar Colección al Pedido</button>
+        <div class="admin-card">
+          <div class="admin-card-header">
+            <div>
+              <h3 class="serif" style="font-size: 1.45rem;">Historial de Movimientos de Stock (Kardex)</h3>
+              <p style="font-size: 0.85rem; color: var(--text-secondary);">Registro detallado de cada entrada de stock, ajuste y salida por ventas.</p>
+            </div>
+            <div class="admin-card-actions">
+              <button class="btn-pdf" onclick="exportMovementsPDF()">📄 Descargar PDF de Movimientos (Kardex)</button>
+            </div>
+          </div>
+          <div class="table-responsive">
+            <table class="admin-table">
+              <thead>
+                <tr>
+                  <th>Fecha / Hora</th>
+                  <th>Producto</th>
+                  <th>Tipo</th>
+                  <th>Cantidad</th>
+                  <th>Stock Ant. → Nuevo</th>
+                  <th>Observación / Nota</th>
+                  <th>Responsable</th>
+                </tr>
+              </thead>
+              <tbody id="adminMovementsTableBody"></tbody>
+            </table>
+          </div>
         </div>
+      </div>
 
-        <div class="pack-card">
-          <span class="section-tag" style="width: fit-content;">Muestrario Completo</span>
-          <h3>Bandeja Maestra (27 Figuras)</h3>
-          <p style="font-size: 0.9rem; color: var(--text-secondary);">Todas las figuras de nuestra fotografía de catálogo para eventos o decoración.</p>
-          <div class="pack-price">$135.000 <small style="font-size: 0.9rem; color: var(--text-muted);">COP</small></div>
-          <ul class="pack-list">
-            <li>✔️ 5 Ositos (Miel Ámbar y Manzanilla Botánico)</li>
-            <li>✔️ 2 Rosas Esculpidas (Azul Noche y Moka)</li>
-            <li>✔️ 8 Flores Medianas (Margaritas y 5 Pétalos)</li>
-            <li>✔️ 2 Hojas Botánicas + 1 Ánfora Blanca + 9 Mini Flores</li>
-          </ul>
-          <button class="btn btn-secondary" onclick="addPackToCart('Bandeja Maestra Completa (27 Figuras)', 135000, 'imagenes/catalogo-figuras-ia.png')">Agregar Bandeja al Pedido</button>
+      <!-- VISTA 2: VENTAS POR DÍA (APARTE) -->
+      <div class="admin-view" id="adminView-dia">
+        <div class="admin-card">
+          <div class="admin-card-header">
+            <div>
+              <span class="section-tag">📅 Contabilidad Diaria</span>
+              <h3 class="serif" style="font-size: 1.6rem;">Informe de Ventas por Día</h3>
+              <p style="font-size: 0.85rem; color: var(--text-secondary);">Selecciona una fecha para consultar sus facturas, productos vendidos, costos y utilidad neta.</p>
+            </div>
+            <div class="admin-card-actions">
+              <label for="filterDayInput" style="font-weight:700; font-size:0.85rem;">Día a consultar:</label>
+              <input type="date" id="filterDayInput" class="form-control" onchange="renderSalesDayView()" />
+              <button class="btn-sm" onclick="setTodayDayFilter()">Hoy</button>
+              <button class="btn-pdf" onclick="exportSalesDayPDF()">📄 Descargar PDF Ventas del Día</button>
+              <button class="btn-pdf" style="background:#141B16;" onclick="exportAllDaysConsolidatedPDF()">📄 PDF Consolidado Todos los Días</button>
+            </div>
+          </div>
+
+          <div class="kpi-grid" id="dayKpis"></div>
+
+          <h4 class="serif" style="font-size: 1.25rem; margin: 18px 0 10px;">Facturas y Productos Vendidos en el Día (<span id="selectedDayLabel"></span>)</h4>
+          <div class="table-responsive" style="margin-bottom: 24px;">
+            <table class="admin-table">
+              <thead>
+                <tr>
+                  <th>Factura</th>
+                  <th>Hora</th>
+                  <th>Cliente / Pago</th>
+                  <th>Productos Vendidos</th>
+                  <th>Unidades</th>
+                  <th>Total Venta</th>
+                  <th>Costo</th>
+                  <th>Ganancia Neta</th>
+                  <th>Acciones</th>
+                </tr>
+              </thead>
+              <tbody id="daySalesTableBody"></tbody>
+            </table>
+          </div>
+
+          <h4 class="serif" style="font-size: 1.25rem; margin: 18px 0 10px;">Resumen Histórico Día por Día</h4>
+          <div class="table-responsive">
+            <table class="admin-table">
+              <thead>
+                <tr>
+                  <th>Fecha (Día)</th>
+                  <th>N° Pedidos</th>
+                  <th>Unidades Vendidas</th>
+                  <th>Ingresos Brutos</th>
+                  <th>Costo Producción</th>
+                  <th>Ganancia Neta</th>
+                  <th>Acción</th>
+                </tr>
+              </thead>
+              <tbody id="allDaysSummaryTableBody"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- VISTA 3: VENTAS POR MES (APARTE) -->
+      <div class="admin-view" id="adminView-mes">
+        <div class="admin-card">
+          <div class="admin-card-header">
+            <div>
+              <span class="section-tag">📆 Contabilidad Mensual</span>
+              <h3 class="serif" style="font-size: 1.6rem;">Informe de Ventas por Mes</h3>
+              <p style="font-size: 0.85rem; color: var(--text-secondary);">Balance contable mensual, evolución día a día del mes y productos más vendidos.</p>
+            </div>
+            <div class="admin-card-actions">
+              <label for="filterMonthInput" style="font-weight:700; font-size:0.85rem;">Mes a consultar:</label>
+              <input type="month" id="filterMonthInput" class="form-control" onchange="renderSalesMonthView()" />
+              <button class="btn-pdf" onclick="exportSalesMonthPDF()">📄 Descargar PDF Informe Mensual</button>
+            </div>
+          </div>
+
+          <div class="kpi-grid" id="monthKpis"></div>
+
+          <h4 class="serif" style="font-size: 1.25rem; margin: 18px 0 10px;">Desglose Diario del Mes (<span id="selectedMonthLabel"></span>)</h4>
+          <div class="table-responsive" style="margin-bottom: 24px;">
+            <table class="admin-table">
+              <thead>
+                <tr>
+                  <th>Fecha</th>
+                  <th>Pedidos</th>
+                  <th>Unidades Vendidas</th>
+                  <th>Ingresos del Día</th>
+                  <th>Costos del Día</th>
+                  <th>Utilidad Neta</th>
+                </tr>
+              </thead>
+              <tbody id="monthDailyBreakdownBody"></tbody>
+            </table>
+          </div>
+
+          <h4 class="serif" style="font-size: 1.25rem; margin: 18px 0 10px;">Productos Vendidos en el Mes</h4>
+          <div class="table-responsive" style="margin-bottom: 24px;">
+            <table class="admin-table">
+              <thead>
+                <tr>
+                  <th>Producto</th>
+                  <th>Categoría</th>
+                  <th>Unidades Vendidas</th>
+                  <th>Ingresos Generados</th>
+                  <th>Costo Total</th>
+                  <th>Utilidad Generada</th>
+                </tr>
+              </thead>
+              <tbody id="monthProductsBreakdownBody"></tbody>
+            </table>
+          </div>
+
+          <h4 class="serif" style="font-size: 1.25rem; margin: 18px 0 10px;">Consolidado de Todos los Meses Registrados</h4>
+          <div class="table-responsive">
+            <table class="admin-table">
+              <thead>
+                <tr>
+                  <th>Mes</th>
+                  <th>N° Pedidos</th>
+                  <th>Unidades</th>
+                  <th>Ingresos Brutos</th>
+                  <th>Costos</th>
+                  <th>Utilidad Neta</th>
+                  <th>Acción</th>
+                </tr>
+              </thead>
+              <tbody id="allMonthsSummaryTableBody"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- VISTA 4: VENTAS POR AÑO (APARTE) -->
+      <div class="admin-view" id="adminView-anio">
+        <div class="admin-card">
+          <div class="admin-card-header">
+            <div>
+              <span class="section-tag">📊 Contabilidad Anual</span>
+              <h3 class="serif" style="font-size: 1.6rem;">Informe de Ventas por Año</h3>
+              <p style="font-size: 0.85rem; color: var(--text-secondary);">Balance general de los 12 meses del año, ingresos acumulados, costos y rentabilidad anual.</p>
+            </div>
+            <div class="admin-card-actions">
+              <label for="filterYearSelect" style="font-weight:700; font-size:0.85rem;">Año Contable:</label>
+              <select id="filterYearSelect" class="form-control" onchange="renderSalesYearView()"></select>
+              <button class="btn-pdf" onclick="exportSalesYearPDF()">📄 Descargar PDF Informe Anual</button>
+            </div>
+          </div>
+
+          <div class="kpi-grid" id="yearKpis"></div>
+
+          <h4 class="serif" style="font-size: 1.25rem; margin: 18px 0 10px;">Balance Mes a Mes del Año <span id="selectedYearLabel"></span> (Enero – Diciembre)</h4>
+          <div class="table-responsive" style="margin-bottom: 24px;">
+            <table class="admin-table">
+              <thead>
+                <tr>
+                  <th>Mes</th>
+                  <th>N° Pedidos</th>
+                  <th>Unidades Vendidas</th>
+                  <th>Ingresos Brutos</th>
+                  <th>Costo Producción</th>
+                  <th>Utilidad Neta</th>
+                  <th>Margen %</th>
+                </tr>
+              </thead>
+              <tbody id="yearMonthlyBreakdownBody"></tbody>
+            </table>
+          </div>
+
+          <h4 class="serif" style="font-size: 1.25rem; margin: 18px 0 10px;">Ranking de Productos Vendidos en el Año <span id="selectedYearLabel2"></span></h4>
+          <div class="table-responsive">
+            <table class="admin-table">
+              <thead>
+                <tr>
+                  <th>Producto</th>
+                  <th>Categoría</th>
+                  <th>Unidades Anuales</th>
+                  <th>Ingresos Anuales</th>
+                  <th>Costo Anual</th>
+                  <th>Utilidad Anual</th>
+                </tr>
+              </thead>
+              <tbody id="yearProductsBreakdownBody"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- VISTA 5: REGISTRAR VENTA MANUAL (POS) & CONTABILIDAD GENERAL -->
+      <div class="admin-view" id="adminView-pos">
+        <div class="admin-card">
+          <div class="admin-card-header">
+            <div>
+              <span class="section-tag">🧾 Punto de Venta &amp; Libro Contable</span>
+              <h3 class="serif" style="font-size: 1.6rem;">Registrar Nueva Venta &amp; Descargar Balance General</h3>
+              <p style="font-size: 0.85rem; color: var(--text-secondary);">Registra ventas realizadas por WhatsApp, Instagram o en efectivo. El stock se descuenta automáticamente.</p>
+            </div>
+            <div class="admin-card-actions">
+              <button class="btn-pdf" onclick="exportFullAccountingPDF()">📄 Descargar PDF Balance Contable General Completo</button>
+            </div>
+          </div>
+
+          <form id="posSaleForm" onsubmit="submitPosSale(event)">
+            <div class="form-grid">
+              <div class="form-group">
+                <label for="posCustomerName">Nombre del Cliente</label>
+                <input type="text" id="posCustomerName" class="form-control" value="Cliente Danny Scents" required />
+              </div>
+              <div class="form-group">
+                <label for="posCustomerPhone">Teléfono / WhatsApp (Opcional)</label>
+                <input type="text" id="posCustomerPhone" class="form-control" placeholder="Ej: 300 123 4567" />
+              </div>
+              <div class="form-group">
+                <label for="posPaymentMethod">Método de Pago</label>
+                <select id="posPaymentMethod" class="form-control">
+                  <option value="Efectivo">💵 Efectivo</option>
+                  <option value="Nequi">📱 Nequi</option>
+                  <option value="Daviplata">📱 Daviplata</option>
+                  <option value="Transferencia Bancaria">🏦 Transferencia Bancaria</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="posSaleDate">Fecha de la Venta</label>
+                <input type="date" id="posSaleDate" class="form-control" required />
+              </div>
+            </div>
+
+            <div class="pos-items-builder">
+              <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+                <strong>🕯️ Productos de la Venta</strong>
+                <button type="button" class="btn-sm" onclick="addPosItemRow()">➕ Agregar Otra Vela</button>
+              </div>
+              <div id="posItemsContainer"></div>
+              <div style="display:flex; justify-content:space-between; align-items:center; padding-top:12px; border-top:1px solid var(--border-soft); margin-top:10px;">
+                <div style="display:flex; align-items:center; gap:10px;">
+                  <label for="posDiscount" style="font-size:0.85rem; font-weight:700;">Descuento ($ COP):</label>
+                  <input type="number" id="posDiscount" class="form-control" style="width:130px;" value="0" min="0" step="500" oninput="updatePosTotalPreview()" />
+                </div>
+                <div style="font-size:1.25rem; font-weight:800; color:var(--sage-primary);">
+                  Total a Cobrar: <span id="posTotalPreview">$0 COP</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="posNotes">Notas / Observaciones Contables</label>
+              <input type="text" id="posNotes" class="form-control" placeholder="Ej: Pedido entregado a domicilio / Recordatorio..." />
+            </div>
+
+            <button type="submit" class="btn btn-primary">✅ Guardar Venta en Base de Datos y Descontar Stock</button>
+          </form>
         </div>
       </div>
     </div>
@@ -283,9 +587,9 @@
           <ul>
             <li><a href="#catalogo" onclick="filterByCategory('ositos')">Ositos Ternura</a></li>
             <li><a href="#catalogo" onclick="filterByCategory('rosas')">Rosas Esculpidas</a></li>
-            <li><a href="#catalogo" onclick="filterByCategory('margaritas')">Margaritas &amp; Crisantemos</a></li>
+            <li><a href="#catalogo" onclick="filterByCategory('margaritas')">Margaritas</a></li>
             <li><a href="#catalogo" onclick="filterByCategory('flores5')">Flores de 5 Pétalos</a></li>
-            <li><a href="#catalogo" onclick="filterByCategory('hojas')">Hojas Botánicas</a></li>
+            <li><a href="#catalogo" onclick="filterByCategory('especiales')">Ramos, Frascos &amp; Esencia</a></li>
           </ul>
         </div>
 
@@ -295,7 +599,6 @@
             <li><a href="#inicio">Inicio</a></li>
             <li><a href="#catalogo">Catálogo &amp; Tienda</a></li>
             <li><a href="#esencia">Aceite de Manzanilla</a></li>
-            <li><a href="#packs">Cajas de Regalo</a></li>
           </ul>
         </div>
 
@@ -363,7 +666,16 @@
     </div>
 
     <div class="drawer-footer">
-      <div class="gift-note-box">
+      <div class="gift-note-box" style="margin-bottom: 10px;">
+        <label for="cartCustomerName">👤 Tu Nombre:</label>
+        <input type="text" id="cartCustomerName" placeholder="Escribe tu nombre..." style="margin-bottom: 8px;" />
+        <label for="cartPaymentMethod">💳 Método de Pago:</label>
+        <select id="cartPaymentMethod" class="form-control" style="width: 100%; margin-bottom: 8px; padding: 8px 10px;">
+          <option value="Efectivo">Efectivo</option>
+          <option value="Nequi">Nequi</option>
+          <option value="Daviplata">Daviplata</option>
+          <option value="Transferencia">Transferencia</option>
+        </select>
         <label for="giftMessageInput">🎀 Frase para tu Caja de Regalo (Opcional):</label>
         <input type="text" id="giftMessageInput" value="Encendida para iluminar mis metas." placeholder="Escribe tu frase personalizada..." />
       </div>
@@ -372,14 +684,165 @@
         <span id="cartTotalValue">$0 COP</span>
       </div>
       <button class="btn btn-primary" style="width: 100%;" onclick="checkoutOrder()">
-        ✨ Confirmar Pedido por WhatsApp / Resumen
+        ✨ Confirmar Pedido y Registrar Venta
       </button>
     </div>
   </aside>
 
+  <!-- MODAL DE INICIO DE SESIÓN -->
+  <div class="auth-modal" id="loginModal" role="dialog" aria-modal="true" aria-labelledby="loginModalTitle">
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
+      <div>
+        <span class="section-tag">🔐 Acceso Administrativo</span>
+        <h3 class="serif" id="loginModalTitle" style="font-size:1.75rem;">Iniciar Sesión — Danny Scents</h3>
+      </div>
+      <button class="close-btn" onclick="closeAllModals()">✕</button>
+    </div>
+    <p style="font-size:0.86rem; color:var(--text-secondary); margin-bottom:16px;">
+      Ingresa al panel de inventario, productos, stock y contabilidad de ventas por día, mes y año.
+    </p>
+    <form onsubmit="submitLogin(event)">
+      <div class="form-group">
+        <label for="loginUsername">Usuario</label>
+        <input type="text" id="loginUsername" class="form-control" placeholder="admin o danny" value="admin" required />
+      </div>
+      <div class="form-group">
+        <label for="loginPassword">Contraseña</label>
+        <input type="password" id="loginPassword" class="form-control" placeholder="••••••••" value="admin123" required />
+      </div>
+      <div style="background:#FAF6EE; padding:10px 14px; border-radius:10px; font-size:0.8rem; color:var(--text-secondary); margin-bottom:16px;">
+        💡 <strong>Credenciales iniciales:</strong> Usuario: <code>admin</code> / Contraseña: <code>admin123</code> (o <code>danny</code> / <code>danny2026</code>)
+      </div>
+      <button type="submit" class="btn btn-primary" style="width:100%;">Ingresar al Panel de Control →</button>
+    </form>
+  </div>
+
+  <!-- MODAL AGREGAR / EDITAR PRODUCTO -->
+  <div class="auth-modal wide" id="productFormModal" role="dialog" aria-modal="true">
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
+      <div>
+        <span class="section-tag">🕯️ Gestión de Catálogo</span>
+        <h3 class="serif" id="productModalTitle" style="font-size:1.7rem;">Agregar Nuevo Producto</h3>
+      </div>
+      <button class="close-btn" onclick="closeAllModals()">✕</button>
+    </div>
+    <form id="productForm" onsubmit="submitProductForm(event)">
+      <input type="hidden" id="prodFormId" />
+      <div class="form-grid">
+        <div class="form-group">
+          <label for="prodName">Nombre del Producto *</label>
+          <input type="text" id="prodName" class="form-control" placeholder="Ej: Vela Margarita Dorada" required />
+        </div>
+        <div class="form-group">
+          <label for="prodCategory">Categoría *</label>
+          <select id="prodCategory" class="form-control" required>
+            <option value="ositos">🧸 Ositos Ternura</option>
+            <option value="rosas">🌹 Rosas Esculpidas</option>
+            <option value="margaritas">🌼 Margaritas</option>
+            <option value="flores5">🌸 Flores de 5 Pétalos</option>
+            <option value="especiales">💐 Ramos, Frascos &amp; Esencia</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="prodPrice">Precio de Venta ($ COP) *</label>
+          <input type="number" id="prodPrice" class="form-control" placeholder="Ej: 2500" min="0" step="100" required />
+        </div>
+        <div class="form-group">
+          <label for="prodCost">Costo Unitario Producción ($ COP) *</label>
+          <input type="number" id="prodCost" class="form-control" placeholder="Ej: 1000" min="0" step="100" required />
+        </div>
+        <div class="form-group">
+          <label for="prodStock">Stock Disponible (Unidades) *</label>
+          <input type="number" id="prodStock" class="form-control" placeholder="Ej: 20" min="0" required />
+        </div>
+        <div class="form-group">
+          <label for="prodMinStock">Alerta de Stock Mínimo</label>
+          <input type="number" id="prodMinStock" class="form-control" value="5" min="0" />
+        </div>
+        <div class="form-group">
+          <label for="prodScent">Aroma / Esencia</label>
+          <input type="text" id="prodScent" class="form-control" value="Aceite Esencial Puro de Manzanilla" />
+        </div>
+        <div class="form-group">
+          <label for="prodBadge">Etiqueta Destacada</label>
+          <input type="text" id="prodBadge" class="form-control" value="✨ Hecha a Mano" />
+        </div>
+        <div class="form-group">
+          <label for="prodImageSelect">Elegir Imagen del Catálogo</label>
+          <select id="prodImageSelect" class="form-control" onchange="onSelectPresetImage(this.value)">
+            <option value="imagenes/osito-miel-ambar.png">Osito Miel Ámbar</option>
+            <option value="imagenes/rosa-azul-noche.png">Rosa Azul Noche Bicolor</option>
+            <option value="imagenes/margarita-blanca-manzanilla.png">Margarita Blanca de Manzanilla</option>
+            <option value="imagenes/flor-bicolor-amarillo-blanco.png">Flor Bicolor Sol y Nube</option>
+            <option value="imagenes/flor-terracota.png">Flor Terracota de Otoño</option>
+            <option value="imagenes/mini-flores-solares.png">Set x4 Mini Flores Solares</option>
+            <option value="imagenes/ramo-velas-ia.png">Bouquet Floral Sol de Manzanilla</option>
+            <option value="imagenes/vela-frasco-rosa.jpeg">Frasco Bicolor Brisa de Manzanilla</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="prodImageUpload">O Subir Foto desde tu Dispositivo</label>
+          <input type="file" id="prodImageUpload" class="form-control" accept="image/*" onchange="handleProductImageUpload(event)" />
+        </div>
+        <div class="form-group full">
+          <label for="prodSpecs">Especificaciones (separadas por coma)</label>
+          <input type="text" id="prodSpecs" class="form-control" value="Peso: 60 g, Duración: 10 h, Cera Natural" />
+        </div>
+        <div class="form-group full">
+          <label for="prodDesc">Descripción del Producto</label>
+          <textarea id="prodDesc" class="form-control" rows="2" placeholder="Describe la vela artesanal..."></textarea>
+        </div>
+      </div>
+      <div style="display:flex; justify-content:flex-end; gap:10px; margin-top:10px;">
+        <button type="button" class="btn btn-secondary" onclick="closeAllModals()">Cancelar</button>
+        <button type="submit" class="btn btn-primary">💾 Guardar Producto</button>
+      </div>
+    </form>
+  </div>
+
+  <!-- MODAL AGREGAR / AJUSTAR STOCK -->
+  <div class="auth-modal" id="stockModal" role="dialog" aria-modal="true">
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
+      <div>
+        <span class="section-tag">📦 Control de Existencias</span>
+        <h3 class="serif" style="font-size:1.7rem;">Agregar o Ajustar Stock</h3>
+      </div>
+      <button class="close-btn" onclick="closeAllModals()">✕</button>
+    </div>
+    <form onsubmit="submitStockForm(event)">
+      <div class="form-group">
+        <label for="stockProductId">Producto *</label>
+        <select id="stockProductId" class="form-control" required></select>
+      </div>
+      <div class="form-group">
+        <label for="stockMoveType">Tipo de Movimiento *</label>
+        <select id="stockMoveType" class="form-control" required>
+          <option value="entrada">➕ Entrada (Sumar nuevo lote al stock actual)</option>
+          <option value="salida">➖ Salida / Baja (Restar unidades del stock)</option>
+          <option value="ajuste">🎯 Ajuste Exacto (Fijar stock en esta cantidad)</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="stockQty">Cantidad de Unidades *</label>
+        <input type="number" id="stockQty" class="form-control" value="10" min="1" required />
+      </div>
+      <div class="form-group">
+        <label for="stockNote">Observación / Lote de Producción</label>
+        <input type="text" id="stockNote" class="form-control" placeholder="Ej: Nuevo lote de producción artesanal" />
+      </div>
+      <div style="display:flex; justify-content:flex-end; gap:10px; margin-top:14px;">
+        <button type="button" class="btn btn-secondary" onclick="closeAllModals()">Cancelar</button>
+        <button type="submit" class="btn btn-primary">📦 Actualizar Inventario</button>
+      </div>
+    </form>
+  </div>
+
   <!-- Toast Notification -->
   <div class="toast" id="toast">Producto agregado a tu pedido</div>
 
+  <!-- Librerías para generación de Informes Contables en PDF -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
   <script src="script.js"></script>
 </body>
 </html>

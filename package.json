@@ -5,9 +5,9 @@
   "main": "server.js",
   "scripts": {
     "build": "echo 'Build listo para Render'",
-    "start": "node server.js"
+    "start": "node --no-warnings server.js"
   },
   "engines": {
-    "node": ">=18.0.0"
+    "node": ">=22.5.0"
   }
 }
