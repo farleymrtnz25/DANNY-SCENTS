@@ -806,7 +806,7 @@ window.checkoutOrder = async function() {
   closeCart();
   showToast('✅ Pedido registrado en contabilidad y listo para enviar');
 
-  const waUrl = `https://wa.me/?text=${encodeURIComponent(message)}`;
+  const waUrl = `https://wa.me/573204159350?text=${encodeURIComponent(message)}`;
   window.open(waUrl, '_blank');
 };
 
