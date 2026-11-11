@@ -830,6 +830,8 @@ window.handleAuthNavClick = function() {
     panel.classList.add('active');
     panel.scrollIntoView({ behavior: 'smooth', block: 'start' });
   } else {
+    document.getElementById('loginUsername').value = '';
+    document.getElementById('loginPassword').value = '';
     document.getElementById('overlay').classList.add('open');
     document.getElementById('loginModal').classList.add('open');
   }

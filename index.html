@@ -704,14 +704,11 @@
     <form onsubmit="submitLogin(event)">
       <div class="form-group">
         <label for="loginUsername">Usuario</label>
-        <input type="text" id="loginUsername" class="form-control" placeholder="admin o danny" value="admin" required />
+        <input type="text" id="loginUsername" class="form-control" placeholder="Ingresa tu usuario" autocomplete="username" required />
       </div>
       <div class="form-group">
         <label for="loginPassword">Contraseña</label>
-        <input type="password" id="loginPassword" class="form-control" placeholder="••••••••" value="admin123" required />
-      </div>
-      <div style="background:#FAF6EE; padding:10px 14px; border-radius:10px; font-size:0.8rem; color:var(--text-secondary); margin-bottom:16px;">
-        💡 <strong>Credenciales iniciales:</strong> Usuario: <code>admin</code> / Contraseña: <code>admin123</code> (o <code>danny</code> / <code>danny2026</code>)
+        <input type="password" id="loginPassword" class="form-control" placeholder="Ingresa tu contraseña" autocomplete="current-password" required />
       </div>
       <button type="submit" class="btn btn-primary" style="width:100%;">Ingresar al Panel de Control →</button>
     </form>
