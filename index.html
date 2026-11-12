@@ -8,6 +8,9 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,600;0,700;1,600&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="manifest" href="site.webmanifest" />
+  <link rel="apple-touch-icon" href="imagenes/osito-miel-ambar.png" />
+  <meta name="theme-color" content="#2E4A36" />
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
@@ -36,6 +39,10 @@
       </ul>
 
       <div class="nav-actions">
+        <a href="Danny_Scents.apk" download="Danny_Scents.apk" class="admin-nav-btn" id="downloadApkBtn" style="text-decoration:none;">
+          <span>📲</span>
+          <span>App Celular</span>
+        </a>
         <button class="admin-nav-btn" id="authNavBtn" onclick="handleAuthNavClick()">
           <span id="authNavIcon">🔐</span>
           <span id="authNavLabel">Iniciar Sesión</span>
@@ -66,6 +73,7 @@
         <div class="hero-ctas">
           <a href="#catalogo" class="btn btn-primary">Ver Catálogo de Velas →</a>
           <a href="#esencia" class="btn btn-secondary">🌼 Esencia de Manzanilla</a>
+          <a href="Danny_Scents.apk" download="Danny_Scents.apk" class="btn btn-secondary" id="heroDownloadApkBtn">📲 Descargar App Celular (.APK)</a>
         </div>
 
         <div class="hero-stats">

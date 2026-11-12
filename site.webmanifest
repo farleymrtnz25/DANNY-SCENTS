@@ -1,0 +1,16 @@
+{
+  "name": "DANNY SCENTS — Velas Artesanales & Contabilidad",
+  "short_name": "Danny Scents",
+  "description": "Tienda y Sistema de Inventario & Contabilidad de Velas Artesanales de Manzanilla",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#FAF7F2",
+  "theme_color": "#2E4A36",
+  "icons": [
+    {
+      "src": "imagenes/osito-miel-ambar.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

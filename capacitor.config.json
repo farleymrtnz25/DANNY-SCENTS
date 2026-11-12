@@ -1,0 +1,8 @@
+{
+  "appId": "com.danny.scents",
+  "appName": "Danny Scents",
+  "webDir": ".",
+  "server": {
+    "cleartext": true
+  }
+}

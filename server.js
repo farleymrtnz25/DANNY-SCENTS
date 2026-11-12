@@ -17,7 +17,9 @@ const MIME_TYPES = {
   '.jpeg': 'image/jpeg',
   '.webp': 'image/webp',
   '.svg': 'image/svg+xml',
-  '.ico': 'image/x-icon'
+  '.ico': 'image/x-icon',
+  '.apk': 'application/vnd.android.package-archive',
+  '.webmanifest': 'application/manifest+json'
 };
 
 const CATEGORY_LABELS = {

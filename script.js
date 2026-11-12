@@ -479,6 +479,20 @@ function handleLocalDBRequest(url, options = {}) {
   return { ok: true };
 }
 
+const RENDER_CLOUD_URL = 'https://danny-scents.onrender.com';
+
+function isRunningInMobileApp() {
+  if (typeof window === 'undefined') return false;
+  if (window.Capacitor && typeof window.Capacitor.isNativePlatform === 'function' && window.Capacitor.isNativePlatform()) {
+    return true;
+  }
+  if (window.AndroidDownloader) return true;
+  const proto = window.location.protocol;
+  if (proto === 'capacitor:' || proto === 'file:') return true;
+  if (window.location.hostname === 'localhost' && !window.location.port) return true;
+  return false;
+}
+
 async function apiFetch(url, options = {}) {
   const headers = {
     'Content-Type': 'application/json',
@@ -487,11 +501,14 @@ async function apiFetch(url, options = {}) {
   if (authToken) {
     headers['Authorization'] = `Bearer ${authToken}`;
   }
+  const targetUrl = isRunningInMobileApp() && url.startsWith('/api/')
+    ? `${RENDER_CLOUD_URL}${url}`
+    : url;
+
   try {
-    const response = await fetch(url, { ...options, headers });
+    const response = await fetch(targetUrl, { ...options, headers });
     const contentType = response.headers.get('content-type') || '';
     if (!contentType.includes('application/json')) {
-      // Si está desplegado como sitio estático en Render, usar motor de BD local
       return handleLocalDBRequest(url, options);
     }
     const data = await response.json();
@@ -1673,7 +1690,22 @@ window.submitPosSale = async function(e) {
 
 // =========================================================
 // GENERACIÓN DE INFORMES CONTABLES EN PDF (PARA CADA SECCIÓN)
+// Compatible con Web y Aplicación Móvil Android (Capacitor WebView)
 // =========================================================
+function savePDFDocument(doc, fileName) {
+  try {
+    if (typeof window !== 'undefined' && window.AndroidDownloader && typeof window.AndroidDownloader.saveBase64File === 'function') {
+      const dataUri = doc.output('datauristring');
+      const base64Data = dataUri.includes(',') ? dataUri.split(',')[1] : dataUri;
+      window.AndroidDownloader.saveBase64File(base64Data, fileName, 'application/pdf');
+      return;
+    }
+  } catch (err) {
+    console.warn('Error en puente nativo Android PDF, usando descarga estándar:', err);
+  }
+  doc.save(fileName);
+}
+
 function createBrandedPDF(title, subtitle) {
   const { jsPDF } = window.jspdf;
   const doc = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
@@ -1748,7 +1780,7 @@ window.exportInventoryPDF = function() {
     styles: { fontSize: 8 }
   });
 
-  doc.save(`Informe_Inventario_DannyScents_${getTodayStr()}.pdf`);
+  savePDFDocument(doc, `Informe_Inventario_DannyScents_${getTodayStr()}.pdf`);
   showToast('📄 PDF de Inventario descargado');
 };
 
@@ -1777,7 +1809,7 @@ window.exportMovementsPDF = function() {
     styles: { fontSize: 7.5 }
   });
 
-  doc.save(`Informe_Movimientos_Stock_${getTodayStr()}.pdf`);
+  savePDFDocument(doc, `Informe_Movimientos_Stock_${getTodayStr()}.pdf`);
   showToast('📄 PDF de Movimientos de Stock descargado');
 };
 
@@ -1828,7 +1860,7 @@ window.exportSalesDayPDF = function() {
     styles: { fontSize: 7.5 }
   });
 
-  doc.save(`Informe_Ventas_Dia_${selectedDay}_DannyScents.pdf`);
+  savePDFDocument(doc, `Informe_Ventas_Dia_${selectedDay}_DannyScents.pdf`);
   showToast(`📄 PDF de Ventas del Día (${selectedDay}) descargado`);
 };
 
@@ -1869,7 +1901,7 @@ window.exportAllDaysConsolidatedPDF = function() {
     styles: { fontSize: 8 }
   });
 
-  doc.save(`Informe_Consolidado_Por_Dias_DannyScents.pdf`);
+  savePDFDocument(doc, `Informe_Consolidado_Por_Dias_DannyScents.pdf`);
   showToast('📄 PDF Consolidado por Días descargado');
 };
 
@@ -1948,7 +1980,7 @@ window.exportSalesMonthPDF = function() {
     styles: { fontSize: 8 }
   });
 
-  doc.save(`Informe_Ventas_Mes_${selectedMonth}_DannyScents.pdf`);
+  savePDFDocument(doc, `Informe_Ventas_Mes_${selectedMonth}_DannyScents.pdf`);
   showToast(`📄 PDF Mensual (${selectedMonth}) descargado`);
 };
 
@@ -2025,7 +2057,7 @@ window.exportSalesYearPDF = function() {
     styles: { fontSize: 8 }
   });
 
-  doc.save(`Informe_Contable_Anual_${selectedYear}_DannyScents.pdf`);
+  savePDFDocument(doc, `Informe_Contable_Anual_${selectedYear}_DannyScents.pdf`);
   showToast(`📄 PDF Contable Anual (${selectedYear}) descargado`);
 };
 
@@ -2087,7 +2119,7 @@ window.exportFullAccountingPDF = function() {
     styles: { fontSize: 7.5 }
   });
 
-  doc.save(`Balance_General_Contable_DannyScents_${getTodayStr()}.pdf`);
+  savePDFDocument(doc, `Balance_General_Contable_DannyScents_${getTodayStr()}.pdf`);
   showToast('📄 Balance General Contable en PDF descargado');
 };
 
