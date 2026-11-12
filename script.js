@@ -179,15 +179,26 @@ function formatMonthName(yyyyMM) {
 // API HELPER CON MOTOR DE BASE DE DATOS LOCAL / SERVIDOR HÍBRIDO
 // (Funciona con SQLite en Node.js y también en Render Static Site)
 // =========================================================
+const CLOUD_SYNC_PRIMARY = 'https://fes-construccion.onrender.com/api/danny-scents/state';
+const CLOUD_NTFY_FILES = 'https://ntfy.sh/danny_scents_files_v1';
+const CLOUD_NTFY_POINTER = 'https://ntfy.sh/danny_scents_pointer_v1';
+const CLOUD_SYNC_MIRROR = 'https://api.restful-api.dev/objects/ff808181a09d98f701a1cffd7a7b1689';
+let lastSyncedTimestamp = 0;
+
 function getLocalDB() {
   const raw = localStorage.getItem('ds_full_database_v1');
   if (raw) {
     try {
-      return JSON.parse(raw);
+      const parsed = JSON.parse(raw);
+      if (parsed && Array.isArray(parsed.products) && parsed.products.length > 0) {
+        return parsed;
+      }
     } catch (e) {}
   }
   const now = new Date().toISOString().slice(0, 19).replace('T', ' ');
   const initialDB = {
+    updatedAt: 1,
+    deletedIds: [],
     products: DEFAULT_PRODUCTS.map(p => ({ ...p, createdAt: now, updatedAt: now })),
     movements: DEFAULT_PRODUCTS.map((p, idx) => ({
       id: idx + 1,
@@ -208,13 +219,169 @@ function getLocalDB() {
   return initialDB;
 }
 
-function saveLocalDB(dbData) {
-  localStorage.setItem('ds_full_database_v1', JSON.stringify(dbData));
+async function pushToCloud(dbData) {
+  const payload = {
+    updatedAt: Number(dbData.updatedAt) || Date.now(),
+    deletedIds: Array.isArray(dbData.deletedIds) ? dbData.deletedIds : [],
+    products: dbData.products || [],
+    movements: (dbData.movements || []).slice(0, 250),
+    sales: (dbData.sales || []).slice(0, 250)
+  };
+  const bodyStr = JSON.stringify(payload);
+
+  const reqPrimary = fetch(CLOUD_SYNC_PRIMARY, {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json' },
+    body: bodyStr
+  }).catch(() => null);
+
+  const reqNtfy = (async () => {
+    try {
+      const fileRes = await fetch(CLOUD_NTFY_FILES, {
+        method: 'PUT',
+        headers: { 'Filename': 'danny_db.json' },
+        body: bodyStr
+      });
+      if (!fileRes.ok) return null;
+      const fileMeta = await fileRes.json();
+      const fileUrl = fileMeta?.attachment?.url;
+      if (!fileUrl) return null;
+
+      const pointerObj = { updatedAt: payload.updatedAt, fileUrl };
+      await Promise.all([
+        fetch(CLOUD_NTFY_POINTER, {
+          method: 'POST',
+          body: JSON.stringify(pointerObj)
+        }).catch(() => null),
+        fetch(CLOUD_SYNC_MIRROR, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ name: 'danny-scents-shared-db-v1', data: pointerObj })
+        }).catch(() => null)
+      ]);
+      return true;
+    } catch (e) {
+      return null;
+    }
+  })();
+
+  await Promise.all([reqPrimary, reqNtfy]);
 }
 
-function handleLocalDBRequest(url, options = {}) {
+async function syncFromCloud() {
+  const localDB = getLocalDB();
+  const fetchJsonWithTimeout = (url, ms = 4500) => {
+    const ctrl = new AbortController();
+    const timer = setTimeout(() => ctrl.abort(), ms);
+    return fetch(url, { cache: 'no-store', signal: ctrl.signal })
+      .then(r => (r.ok ? r.json() : null))
+      .catch(() => null)
+      .finally(() => clearTimeout(timer));
+  };
+
+  const fetchTextWithTimeout = (url, ms = 4500) => {
+    const ctrl = new AbortController();
+    const timer = setTimeout(() => ctrl.abort(), ms);
+    return fetch(url, { cache: 'no-store', signal: ctrl.signal })
+      .then(r => (r.ok ? r.text() : null))
+      .catch(() => null)
+      .finally(() => clearTimeout(timer));
+  };
+
+  const [resPrimary, ntfyLinesRaw, resMirror] = await Promise.all([
+    fetchJsonWithTimeout(CLOUD_SYNC_PRIMARY),
+    fetchTextWithTimeout(`${CLOUD_NTFY_POINTER}/json?poll=1&since=all`),
+    fetchJsonWithTimeout(CLOUD_SYNC_MIRROR)
+  ]);
+
+  let candidates = [];
+  if (resPrimary && Array.isArray(resPrimary.products) && resPrimary.products.length > 0) {
+    candidates.push(resPrimary);
+  }
+
+  let pointerUrls = [];
+  if (ntfyLinesRaw) {
+    const lines = ntfyLinesRaw.trim().split('\n').filter(Boolean);
+    for (let i = lines.length - 1; i >= 0; i--) {
+      try {
+        const ev = JSON.parse(lines[i]);
+        if (ev && ev.message) {
+          const ptr = JSON.parse(ev.message);
+          if (ptr && ptr.fileUrl) {
+            pointerUrls.push(ptr.fileUrl);
+            break;
+          }
+        }
+      } catch (e) {}
+    }
+  }
+  if (resMirror && resMirror.data && resMirror.data.fileUrl && !pointerUrls.includes(resMirror.data.fileUrl)) {
+    pointerUrls.push(resMirror.data.fileUrl);
+  }
+
+  if (pointerUrls.length > 0) {
+    const fileStates = await Promise.all(pointerUrls.map(u => fetchJsonWithTimeout(u)));
+    for (const st of fileStates) {
+      if (st && Array.isArray(st.products) && st.products.length > 0) {
+        candidates.push(st);
+      }
+    }
+  }
+
+  // Si la nube aún está vacía, subir la base de datos de este dispositivo para compartirla con todos
+  if (candidates.length === 0) {
+    localDB.updatedAt = Number(localDB.updatedAt) || Date.now();
+    localStorage.setItem('ds_full_database_v1', JSON.stringify(localDB));
+    await pushToCloud(localDB);
+    return localDB;
+  }
+
+  candidates.sort((a, b) => (Number(b.updatedAt) || 0) - (Number(a.updatedAt) || 0));
+  const bestCloud = candidates[0];
+
+  const deletedSet = new Set([
+    ...(Array.isArray(bestCloud.deletedIds) ? bestCloud.deletedIds : []),
+    ...(Array.isArray(localDB.deletedIds) ? localDB.deletedIds : [])
+  ]);
+
+  // Si este dispositivo tenía productos personalizados creados antes de sincronizar, unirlos y subirlos
+  const cloudIds = new Set((bestCloud.products || []).map(p => p.id));
+  const localExtraProducts = (localDB.products || []).filter(
+    p => !cloudIds.has(p.id) && !deletedSet.has(p.id)
+  );
+
+  let finalState = bestCloud;
+  if ((Number(localDB.updatedAt) || 0) > (Number(bestCloud.updatedAt) || 0)) {
+    finalState = localDB;
+    await pushToCloud(finalState);
+  } else if (localExtraProducts.length > 0) {
+    finalState = {
+      ...bestCloud,
+      updatedAt: Date.now(),
+      deletedIds: Array.from(deletedSet),
+      products: [...bestCloud.products, ...localExtraProducts]
+    };
+    await pushToCloud(finalState);
+  }
+
+  lastSyncedTimestamp = Number(finalState.updatedAt) || Date.now();
+  localStorage.setItem('ds_full_database_v1', JSON.stringify(finalState));
+  return finalState;
+}
+
+function saveLocalDB(dbData) {
+  dbData.updatedAt = Date.now();
+  lastSyncedTimestamp = dbData.updatedAt;
+  localStorage.setItem('ds_full_database_v1', JSON.stringify(dbData));
+  return pushToCloud(dbData);
+}
+
+async function handleLocalDBRequest(url, options = {}) {
   const method = (options.method || 'GET').toUpperCase();
   const body = options.body ? JSON.parse(options.body) : {};
+  if (method === 'GET' && (url === '/api/products' || url === '/api/sales' || url === '/api/inventory/movements')) {
+    await syncFromCloud();
+  }
   const dbData = getLocalDB();
   const d = new Date();
   const tz = d.getTimezoneOffset() * 60000;
@@ -285,7 +452,7 @@ function handleLocalDBRequest(url, options = {}) {
       user_name: currentUser?.fullName || 'Admin',
       created_at: now
     });
-    saveLocalDB(dbData);
+    await saveLocalDB(dbData);
     return { product: newProd };
   }
 
@@ -313,13 +480,15 @@ function handleLocalDBRequest(url, options = {}) {
           created_at: now
         });
       }
-      saveLocalDB(dbData);
+      await saveLocalDB(dbData);
       return { product: updated };
     }
 
     if (method === 'DELETE') {
+      dbData.deletedIds = Array.isArray(dbData.deletedIds) ? dbData.deletedIds : [];
+      if (!dbData.deletedIds.includes(id)) dbData.deletedIds.push(id);
       dbData.products.splice(idx, 1);
-      saveLocalDB(dbData);
+      await saveLocalDB(dbData);
       return { ok: true };
     }
   }
@@ -349,7 +518,7 @@ function handleLocalDBRequest(url, options = {}) {
       user_name: currentUser?.fullName || 'Admin',
       created_at: now
     });
-    saveLocalDB(dbData);
+    await saveLocalDB(dbData);
     return { product: prod };
   }
 
@@ -441,7 +610,7 @@ function handleLocalDBRequest(url, options = {}) {
     };
 
     dbData.sales.unshift(newSale);
-    saveLocalDB(dbData);
+    await saveLocalDB(dbData);
     return { sale: newSale };
   }
 
@@ -471,7 +640,7 @@ function handleLocalDBRequest(url, options = {}) {
         }
       }
       dbData.sales.splice(idx, 1);
-      saveLocalDB(dbData);
+      await saveLocalDB(dbData);
     }
     return { ok: true };
   }
@@ -494,34 +663,8 @@ function isRunningInMobileApp() {
 }
 
 async function apiFetch(url, options = {}) {
-  const headers = {
-    'Content-Type': 'application/json',
-    ...(options.headers || {})
-  };
-  if (authToken) {
-    headers['Authorization'] = `Bearer ${authToken}`;
-  }
-  const targetUrl = isRunningInMobileApp() && url.startsWith('/api/')
-    ? `${RENDER_CLOUD_URL}${url}`
-    : url;
-
-  try {
-    const response = await fetch(targetUrl, { ...options, headers });
-    const contentType = response.headers.get('content-type') || '';
-    if (!contentType.includes('application/json')) {
-      return handleLocalDBRequest(url, options);
-    }
-    const data = await response.json();
-    if (!response.ok) {
-      throw new Error(data.error || 'Error en la petición');
-    }
-    return data;
-  } catch (err) {
-    if (err.message === 'Usuario o contraseña incorrectos' || err.message === 'No autenticado') {
-      throw err;
-    }
-    return handleLocalDBRequest(url, options);
-  }
+  // Usar siempre el motor sincronizado en la nube para compartir productos, stock y ventas entre todos los celulares y la web
+  return handleLocalDBRequest(url, options);
 }
 
 async function loadCatalogFromDB() {
@@ -1101,7 +1244,33 @@ window.handleProductImageUpload = function(e) {
   if (!file) return;
   const reader = new FileReader();
   reader.onload = () => {
-    uploadedProductImageBase64 = reader.result;
+    const img = new Image();
+    img.onload = () => {
+      const maxDim = 520;
+      let w = img.width;
+      let h = img.height;
+      if (w > maxDim || h > maxDim) {
+        if (w > h) {
+          h = Math.round((h * maxDim) / w);
+          w = maxDim;
+        } else {
+          w = Math.round((w * maxDim) / h);
+          h = maxDim;
+        }
+      }
+      const canvas = document.createElement('canvas');
+      canvas.width = w;
+      canvas.height = h;
+      const ctx = canvas.getContext('2d');
+      ctx.fillStyle = '#FFFFFF';
+      ctx.fillRect(0, 0, w, h);
+      ctx.drawImage(img, 0, 0, w, h);
+      uploadedProductImageBase64 = canvas.toDataURL('image/jpeg', 0.78);
+    };
+    img.onerror = () => {
+      uploadedProductImageBase64 = reader.result;
+    };
+    img.src = reader.result;
   };
   reader.readAsDataURL(file);
 };
@@ -2175,4 +2344,25 @@ document.addEventListener('DOMContentLoaded', async () => {
     closeCart();
     closeAllModals();
   });
+
+  // Sincronización automática entre celulares y navegadores web cuando vuelve al frente o cada 15s
+  document.addEventListener('visibilitychange', async () => {
+    if (document.visibilityState === 'visible') {
+      await loadCatalogFromDB();
+      if (currentUser) await loadAdminData();
+    }
+  });
+
+  setInterval(async () => {
+    if (document.visibilityState === 'visible') {
+      const prevTs = lastSyncedTimestamp;
+      const state = await syncFromCloud();
+      if (state && Number(state.updatedAt) !== prevTs) {
+        PRODUCTS = state.products || PRODUCTS;
+        updateCatalogCounts();
+        renderProducts();
+        if (currentUser) await loadAdminData();
+      }
+    }
+  }, 15000);
 });
