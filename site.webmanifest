@@ -1,14 +1,19 @@
 {
-  "name": "DANNY SCENTS — Velas Artesanales & Contabilidad",
+  "name": "Danny Scents - Velas Artesanales & Contabilidad",
   "short_name": "Danny Scents",
-  "description": "Tienda y Sistema de Inventario & Contabilidad de Velas Artesanales de Manzanilla",
-  "start_url": "/",
+  "description": "Tienda de velas artesanales de manzanilla, inventario, punto de venta y contabilidad con reportes PDF.",
+  "start_url": "./index.html",
   "display": "standalone",
-  "background_color": "#FAF7F2",
+  "background_color": "#FAF6F0",
   "theme_color": "#2E4A36",
   "icons": [
     {
-      "src": "imagenes/osito-miel-ambar.png",
+      "src": "imagenes/logo-danny.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "imagenes/logo-danny.png",
       "sizes": "512x512",
       "type": "image/png"
     }

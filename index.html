@@ -2,14 +2,15 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, viewport-fit=cover" />
   <title>DANNY SCENTS | Velas Artesanales & Aromaterapia de Manzanilla</title>
   <meta name="description" content="DANNY SCENTS: Velas escultóricas 100% artesanales con Aceite Esencial Puro de Manzanilla. Ositos, rosas, margaritas, hojas botánicas, ramos florales y cajas de regalo." />
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,600;0,700;1,600&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="manifest" href="site.webmanifest" />
-  <link rel="apple-touch-icon" href="imagenes/osito-miel-ambar.png" />
+  <link rel="icon" type="image/png" href="imagenes/logo-danny.png" />
+  <link rel="apple-touch-icon" href="imagenes/logo-danny.png" />
   <meta name="theme-color" content="#2E4A36" />
   <link rel="stylesheet" href="styles.css" />
 </head>
@@ -25,7 +26,7 @@
   <header class="navbar">
     <div class="container navbar-inner">
       <a href="#inicio" class="brand-logo">
-        <div class="brand-icon">🕯️</div>
+        <img src="imagenes/logo-danny.png" alt="Logo Danny Scents" class="brand-logo-img" />
         <div class="brand-text">
           <span class="brand-name">DANNY SCENTS</span>
           <span class="brand-tagline">Arte en Cera &amp; Manzanilla</span>
@@ -579,7 +580,7 @@
       <div class="footer-grid">
         <div>
           <div class="brand-logo" style="margin-bottom: 14px;">
-            <div class="brand-icon">🕯️</div>
+            <img src="imagenes/logo-danny.png" alt="Logo Danny Scents" class="brand-logo-img" />
             <div class="brand-text">
               <span class="brand-name" style="color: #FFF;">DANNY SCENTS</span>
               <span class="brand-tagline" style="color: var(--gold-primary);">Velas Artesanales &amp; Aromaterapia</span>
@@ -699,10 +700,13 @@
 
   <!-- MODAL DE INICIO DE SESIÓN -->
   <div class="auth-modal" id="loginModal" role="dialog" aria-modal="true" aria-labelledby="loginModalTitle">
-    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
-      <div>
-        <span class="section-tag">🔐 Acceso Administrativo</span>
-        <h3 class="serif" id="loginModalTitle" style="font-size:1.75rem;">Iniciar Sesión — Danny Scents</h3>
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px;">
+      <div style="display:flex; align-items:center; gap:12px;">
+        <img src="imagenes/logo-danny.png" alt="Logo Danny Scents" style="width:54px; height:54px; border-radius:50%; object-fit:cover; border:2px solid var(--gold-primary); background:#FFF;" />
+        <div>
+          <span class="section-tag" style="margin-bottom:4px;">🔐 Acceso Administrativo</span>
+          <h3 class="serif" id="loginModalTitle" style="font-size:1.55rem;">Iniciar Sesión</h3>
+        </div>
       </div>
       <button class="close-btn" onclick="closeAllModals()">✕</button>
     </div>
@@ -841,6 +845,29 @@
       </div>
     </form>
   </div>
+
+  <!-- Barra de Navegación Inferior para Celular / App -->
+  <nav class="mobile-bottom-nav" aria-label="Navegación móvil rápida">
+    <a href="#inicio" class="mobile-nav-item">
+      <span class="mobile-nav-icon">🏠</span>
+      <span>Inicio</span>
+    </a>
+    <a href="#catalogo" class="mobile-nav-item">
+      <span class="mobile-nav-icon">🕯️</span>
+      <span>Catálogo</span>
+    </a>
+    <button type="button" class="mobile-nav-item" onclick="openCart()">
+      <span class="mobile-nav-icon" style="position:relative;">
+        🛍️
+        <span class="mobile-nav-badge" id="mobileCartCount">0</span>
+      </span>
+      <span>Mi Pedido</span>
+    </button>
+    <button type="button" class="mobile-nav-item" id="mobileAuthNavBtn" onclick="handleAuthNavClick()">
+      <span class="mobile-nav-icon" id="mobileAuthNavIcon">🔐</span>
+      <span id="mobileAuthNavLabel">Panel</span>
+    </button>
+  </nav>
 
   <!-- Toast Notification -->
   <div class="toast" id="toast">Producto agregado a tu pedido</div>

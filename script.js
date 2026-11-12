@@ -731,6 +731,7 @@ window.changeQty = function(id, delta) {
 
 function updateCartUI() {
   const countEl = document.getElementById('cartCount');
+  const mobileCountEl = document.getElementById('mobileCartCount');
   const listEl = document.getElementById('cartItemsList');
   const totalEl = document.getElementById('cartTotalValue');
 
@@ -738,6 +739,7 @@ function updateCartUI() {
   const totalPrice = cart.reduce((acc, item) => acc + item.price * item.qty, 0);
 
   if (countEl) countEl.textContent = totalItems;
+  if (mobileCountEl) mobileCountEl.textContent = totalItems;
   if (totalEl) totalEl.textContent = formatCOP(totalPrice);
 
   if (!listEl) return;
@@ -887,6 +889,10 @@ window.logoutUser = async function() {
   navBtn.classList.remove('logged-in');
   document.getElementById('authNavIcon').textContent = '🔐';
   document.getElementById('authNavLabel').textContent = 'Iniciar Sesión';
+  const mobIcon = document.getElementById('mobileAuthNavIcon');
+  const mobLabel = document.getElementById('mobileAuthNavLabel');
+  if (mobIcon) mobIcon.textContent = '🔐';
+  if (mobLabel) mobLabel.textContent = 'Ingresar';
   showToast('Sesión cerrada correctamente');
 };
 
@@ -909,6 +915,10 @@ async function onUserLoggedIn(scroll = true) {
   navBtn.classList.add('logged-in');
   document.getElementById('authNavIcon').textContent = '📊';
   document.getElementById('authNavLabel').textContent = 'Panel de Usuario';
+  const mobIcon = document.getElementById('mobileAuthNavIcon');
+  const mobLabel = document.getElementById('mobileAuthNavLabel');
+  if (mobIcon) mobIcon.textContent = '📊';
+  if (mobLabel) mobLabel.textContent = 'Contabilidad';
   document.getElementById('adminUserNameDisplay').textContent = `${currentUser.fullName} (@${currentUser.username})`;
 
   const panel = document.getElementById('adminPanelSection');
@@ -2127,6 +2137,9 @@ window.exportFullAccountingPDF = function() {
 // INICIALIZACIÓN DE LA APLICACIÓN
 // =========================================================
 document.addEventListener('DOMContentLoaded', async () => {
+  if (isRunningInMobileApp()) {
+    document.body.classList.add('is-mobile-app');
+  }
   await loadCatalogFromDB();
   updateCartUI();
   await checkExistingSession();
