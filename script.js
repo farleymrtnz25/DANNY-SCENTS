@@ -129,6 +129,70 @@ const DEFAULT_PRODUCTS = [
     trayOrigin: 'Frasco de vidrio con degradado verde-amarillo y rosa amarilla esculpida en la cima',
     specs: ['Contenido: 220 g', 'Duración: 40+ horas', 'Frasco Reutilizable'],
     description: 'Vela premium en frasco de vidrio cristalino con doble capa en degradado verde pradera y amarillo manzanilla, coronada en la superficie por una delicada rosa amarilla esculpida en cera.'
+  },
+  {
+    id: 'manzanilla-deshidratada-natural',
+    name: 'Manzanilla Deshidratada 100% Natural',
+    category: 'especiales',
+    categoryLabel: '💐 Ramos, Frascos & Esencia',
+    scent: 'Flor de Manzanilla Pura & Notas Herbales',
+    price: 1500,
+    cost: 600,
+    stock: 30,
+    minStock: 6,
+    image: 'imagenes/manzanilla-deshidratada.jpg',
+    badge: '🌿 100% Natural',
+    trayOrigin: 'Flores enteras y botones de manzanilla seleccionados y secados artesanalmente',
+    specs: ['Flor Seca Seleccionada', 'Aroma Herbal Relajante', '100% Orgánica'],
+    description: 'Selección botánica de flores y botones de manzanilla deshidratada de forma natural para conservar intacto su aroma dulce, herbal y relajante. Ideal para infusiones aromáticas, baños botánicos, saquitos perfumados o decoración artesanal.'
+  },
+  {
+    id: 'vela-pequena-manzanilla',
+    name: 'Vela Pequeña de Manzanilla 100% Natural',
+    category: 'especiales',
+    categoryLabel: '💐 Ramos, Frascos & Esencia',
+    scent: 'Aroma de Manzanilla 100% Natural',
+    price: 3000,
+    cost: 1200,
+    stock: 25,
+    minStock: 5,
+    image: 'imagenes/vela-pequena-manzanilla.jpg',
+    badge: '🌼 100% Natural',
+    trayOrigin: 'Frasco compacto de cristal coronado con flor acanalada ámbar y brote verde',
+    specs: ['Contenido: 110 g', 'Duración: 18+ horas', 'Esencia 100% Natural'],
+    description: 'Delicada vela pequeña en envase de cristal transparente con etiqueta artesanal Danny Essence, elaborada con aroma de manzanilla 100% natural y coronada por un relieve floral ámbar con pabilo de hojita verde.'
+  },
+  {
+    id: 'vela-grandecita-manzanilla-flor',
+    name: 'Vela Grandecita de Manzanilla con Flor',
+    category: 'especiales',
+    categoryLabel: '💐 Ramos, Frascos & Esencia',
+    scent: 'Manzanilla 100% Natural & Miel Dorada',
+    price: 4000,
+    cost: 1600,
+    stock: 20,
+    minStock: 5,
+    image: 'imagenes/vela-grandecita-manzanilla.jpg',
+    badge: '🌸 Con Flor Encima',
+    trayOrigin: 'Frasco alto decorado con lazo de yute rústico y flor esculpida en la cima',
+    specs: ['Contenido: 180 g', 'Duración: 32+ horas', 'Con Flor Esculpida'],
+    description: 'Vela grandecita en frasco de vidrio facetado decorado con un lazo de cabuya artesanal. Elaborada con esencia de manzanilla 100% natural en tonos dorados y verdes, coronada en la cima por una hermosa flor esculpida en cera con brote botánico.'
+  },
+  {
+    id: 'aceite-manzanilla-natural',
+    name: 'Aceite de Manzanilla 100% Natural',
+    category: 'especiales',
+    categoryLabel: '💐 Ramos, Frascos & Esencia',
+    scent: 'Extracto Puro de Manzanilla Dorada',
+    price: 2800,
+    cost: 1100,
+    stock: 25,
+    minStock: 5,
+    image: 'imagenes/aceite-manzanilla-natural.jpg',
+    badge: '💧 Esencia Pura',
+    trayOrigin: 'Botella de vidrio con tapón de corcho natural y lazo de rafia artesanal',
+    specs: ['Extracto 100% Natural', 'Tapón de Corcho', 'Aromaterapia & Piel'],
+    description: 'Aceite concentrado de manzanilla 100% natural presentado en una elegante botella de vidrio con tapón de corcho y lazo rústico. Su fórmula botánica de tono dorado luminoso es ideal para difusores, masajes relajantes, cuidado de la piel y aromaterapia en el hogar.'
   }
 ];
 
@@ -186,16 +250,28 @@ const CLOUD_SYNC_MIRROR = 'https://api.restful-api.dev/objects/ff808181a09d98f70
 let lastSyncedTimestamp = 0;
 
 function getLocalDB() {
+  const now = new Date().toISOString().slice(0, 19).replace('T', ' ');
   const raw = localStorage.getItem('ds_full_database_v1');
   if (raw) {
     try {
       const parsed = JSON.parse(raw);
       if (parsed && Array.isArray(parsed.products) && parsed.products.length > 0) {
+        const deletedSet = new Set(Array.isArray(parsed.deletedIds) ? parsed.deletedIds : []);
+        const existingIds = new Set(parsed.products.map(p => p.id));
+        let addedMissingDefaults = false;
+        for (const defProd of DEFAULT_PRODUCTS) {
+          if (!existingIds.has(defProd.id) && !deletedSet.has(defProd.id)) {
+            parsed.products.push({ ...defProd, createdAt: now, updatedAt: now });
+            addedMissingDefaults = true;
+          }
+        }
+        if (addedMissingDefaults) {
+          localStorage.setItem('ds_full_database_v1', JSON.stringify(parsed));
+        }
         return parsed;
       }
     } catch (e) {}
   }
-  const now = new Date().toISOString().slice(0, 19).replace('T', ' ');
   const initialDB = {
     updatedAt: 1,
     deletedIds: [],
@@ -749,7 +825,7 @@ function renderProducts() {
             <span class="badge badge-category">${product.categoryLabel}</span>
             <span class="badge badge-ai">${product.badge}</span>
           </div>
-          <img src="${product.image}" alt="${product.name}" loading="lazy" />
+          <img src="${product.image}" alt="${product.name}" loading="lazy" onerror="if(this.src && !this.dataset.fb && '${product.image}'.startsWith('imagenes/')){this.dataset.fb='1';this.src='https://raw.githubusercontent.com/farleymrtnz25/DANNY-SCENTS/main/${product.image}';}" />
           <button class="quick-view-btn" onclick="openQuickView('${product.id}')">🔍 Ver Detalle</button>
         </div>
         <div class="product-info">

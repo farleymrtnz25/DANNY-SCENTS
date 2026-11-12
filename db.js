@@ -260,30 +260,94 @@ const INITIAL_PRODUCTS = [
     tray_origin: 'Frasco de vidrio con degradado verde-amarillo y rosa amarilla esculpida en la cima',
     specs: ['Contenido: 220 g', 'Duración: 40+ horas', 'Frasco Reutilizable'],
     description: 'Vela premium en frasco de vidrio cristalino con doble capa en degradado verde pradera y amarillo manzanilla, coronada en la superficie por una delicada rosa amarilla esculpida en cera.'
+  },
+  {
+    id: 'manzanilla-deshidratada-natural',
+    name: 'Manzanilla Deshidratada 100% Natural',
+    category: 'especiales',
+    category_label: '💐 Ramos, Frascos & Esencia',
+    scent: 'Flor de Manzanilla Pura & Notas Herbales',
+    price: 1500,
+    cost: 600,
+    stock: 30,
+    min_stock: 6,
+    image: 'imagenes/manzanilla-deshidratada.jpg',
+    badge: '🌿 100% Natural',
+    tray_origin: 'Flores enteras y botones de manzanilla seleccionados y secados artesanalmente',
+    specs: ['Flor Seca Seleccionada', 'Aroma Herbal Relajante', '100% Orgánica'],
+    description: 'Selección botánica de flores y botones de manzanilla deshidratada de forma natural para conservar intacto su aroma dulce, herbal y relajante. Ideal para infusiones aromáticas, baños botánicos, saquitos perfumados o decoración artesanal.'
+  },
+  {
+    id: 'vela-pequena-manzanilla',
+    name: 'Vela Pequeña de Manzanilla 100% Natural',
+    category: 'especiales',
+    category_label: '💐 Ramos, Frascos & Esencia',
+    scent: 'Aroma de Manzanilla 100% Natural',
+    price: 3000,
+    cost: 1200,
+    stock: 25,
+    min_stock: 5,
+    image: 'imagenes/vela-pequena-manzanilla.jpg',
+    badge: '🌼 100% Natural',
+    tray_origin: 'Frasco compacto de cristal coronado con flor acanalada ámbar y brote verde',
+    specs: ['Contenido: 110 g', 'Duración: 18+ horas', 'Esencia 100% Natural'],
+    description: 'Delicada vela pequeña en envase de cristal transparente con etiqueta artesanal Danny Essence, elaborada con aroma de manzanilla 100% natural y coronada por un relieve floral ámbar con pabilo de hojita verde.'
+  },
+  {
+    id: 'vela-grandecita-manzanilla-flor',
+    name: 'Vela Grandecita de Manzanilla con Flor',
+    category: 'especiales',
+    category_label: '💐 Ramos, Frascos & Esencia',
+    scent: 'Manzanilla 100% Natural & Miel Dorada',
+    price: 4000,
+    cost: 1600,
+    stock: 20,
+    min_stock: 5,
+    image: 'imagenes/vela-grandecita-manzanilla.jpg',
+    badge: '🌸 Con Flor Encima',
+    tray_origin: 'Frasco alto decorado con lazo de yute rústico y flor esculpida en la cima',
+    specs: ['Contenido: 180 g', 'Duración: 32+ horas', 'Con Flor Esculpida'],
+    description: 'Vela grandecita en frasco de vidrio facetado decorado con un lazo de cabuya artesanal. Elaborada con esencia de manzanilla 100% natural en tonos dorados y verdes, coronada en la cima por una hermosa flor esculpida en cera con brote botánico.'
+  },
+  {
+    id: 'aceite-manzanilla-natural',
+    name: 'Aceite de Manzanilla 100% Natural',
+    category: 'especiales',
+    category_label: '💐 Ramos, Frascos & Esencia',
+    scent: 'Extracto Puro de Manzanilla Dorada',
+    price: 2800,
+    cost: 1100,
+    stock: 25,
+    min_stock: 5,
+    image: 'imagenes/aceite-manzanilla-natural.jpg',
+    badge: '💧 Esencia Pura',
+    tray_origin: 'Botella de vidrio con tapón de corcho natural y lazo de rafia artesanal',
+    specs: ['Extracto 100% Natural', 'Tapón de Corcho', 'Aromaterapia & Piel'],
+    description: 'Aceite concentrado de manzanilla 100% natural presentado en una elegante botella de vidrio con tapón de corcho y lazo rústico. Su fórmula botánica de tono dorado luminoso es ideal para difusores, masajes relajantes, cuidado de la piel y aromaterapia en el hogar.'
   }
 ];
 
-const prodCount = db.prepare('SELECT COUNT(*) as count FROM products').get().count;
-if (prodCount === 0) {
-  const now = getLocalISO();
-  const insertProd = db.prepare(`
-    INSERT INTO products (
-      id, name, category, category_label, scent, price, cost, stock, min_stock,
-      image, badge, tray_origin, specs, description, active, created_at, updated_at
-    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 1, ?, ?)
-  `);
-  const insertMov = db.prepare(`
-    INSERT INTO inventory_movements (
-      product_id, product_name, type, quantity, prev_stock, new_stock, unit_cost, note, user_name, created_at
-    ) VALUES (?, ?, 'entrada', ?, 0, ?, ?, 'Inventario inicial del catálogo', 'Sistema', ?)
-  `);
+const nowSeed = getLocalISO();
+const checkProd = db.prepare('SELECT id FROM products WHERE id = ?');
+const insertProd = db.prepare(`
+  INSERT INTO products (
+    id, name, category, category_label, scent, price, cost, stock, min_stock,
+    image, badge, tray_origin, specs, description, active, created_at, updated_at
+  ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 1, ?, ?)
+`);
+const insertMov = db.prepare(`
+  INSERT INTO inventory_movements (
+    product_id, product_name, type, quantity, prev_stock, new_stock, unit_cost, note, user_name, created_at
+  ) VALUES (?, ?, 'entrada', ?, 0, ?, ?, 'Inventario inicial del catálogo', 'Sistema', ?)
+`);
 
-  for (const p of INITIAL_PRODUCTS) {
+for (const p of INITIAL_PRODUCTS) {
+  if (!checkProd.get(p.id)) {
     insertProd.run(
       p.id, p.name, p.category, p.category_label, p.scent, p.price, p.cost, p.stock, p.min_stock,
-      p.image, p.badge, p.tray_origin, JSON.stringify(p.specs), p.description, now, now
+      p.image, p.badge, p.tray_origin, JSON.stringify(p.specs), p.description, nowSeed, nowSeed
     );
-    insertMov.run(p.id, p.name, p.stock, p.stock, p.cost, now);
+    insertMov.run(p.id, p.name, p.stock, p.stock, p.cost, nowSeed);
   }
 }
 
